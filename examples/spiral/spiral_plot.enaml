@@ -78,12 +78,19 @@ SpiralWindow(MainWindow):
                 minimum = 1.0
                 maximum = 4.0
                 value := spiral.end_scale
-            Label:
-                text = "Shape:"
-            ComboBox:
-                id: shape
-                items = spiral.component.shape_choices
-                value := spiral.shape
+            Form:
+                Label:
+                    text = 'Inverted:'
+                CheckBox:
+                    id: inverted
+                    checked := spiral.inverted
+                Label:
+                    text = "Shape:"
+                ComboBox:
+                    id: shape
+                    items = spiral.component.shape_choices
+                    value := spiral.shape
             PushButton:
+                id: save
                 text = "Save"
                 released >> spiral.save()

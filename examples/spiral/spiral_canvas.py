@@ -10,22 +10,22 @@ import numpy as np
 
 from enable.api import Component
 from enable.kiva_graphics_context import GraphicsContext
-from traits.api import DelegatesTo, Float, Instance, on_trait_change, Trait
+from traits.api import Bool, DelegatesTo, Float, Instance, on_trait_change, Trait
 
 from enaml.toolkit import Toolkit
 from enaml.widgets.enable_canvas import EnableCanvas
 
 
-COLORS = ((0.0,0.0,0.0,1.0), (1.0,1.0,1.0,1.0))
+COLORS = ((1.0,1.0,1.0,1.0), (0.0,0.0,0.0,1.0))
 
-def _draw_circles(gc, x, y, r, t, n):
+def _draw_circles(gc, colors, x, y, r, t, n):
     segment_width = r/float(n)
     for i in range(n, 0, -1):
         gc.arc(x, y, i*segment_width, 0.0, 2*np.pi)
-        gc.set_fill_color(COLORS[i%2])
+        gc.set_fill_color(colors[i%2])
         gc.fill_path()
 
-def _draw_squares(gc, x, y, r, t, n):
+def _draw_squares(gc, colors, x, y, r, t, n):
     segment_width = r/float(n)
     with gc:
         gc.translate_ctm(x, y)
@@ -33,10 +33,10 @@ def _draw_squares(gc, x, y, r, t, n):
         for i in range(n, 0, -1):
             half_width = i*segment_width
             gc.rect(-half_width, -half_width, half_width*2.0, half_width*2.0)
-            gc.set_fill_color(COLORS[i%2])
+            gc.set_fill_color(colors[i%2])
             gc.fill_path()
 
-def _draw_triangles(gc, x, y, r, t, n):
+def _draw_triangles(gc, colors, x, y, r, t, n):
     segment_width = r/float(n)
     with gc:
         gc.translate_ctm(x, y)
@@ -50,7 +50,7 @@ def _draw_triangles(gc, x, y, r, t, n):
                 gc.line_to(0.5, -0.28867513459481287)
                 gc.line_to(0.0, 0.7113248654051871 * 0.85)
                 gc.close_path()
-                gc.set_fill_color(COLORS[i%2])
+                gc.set_fill_color(colors[i%2])
                 gc.fill_path()
 
 shape_dict = dict(Circle=_draw_circles,
@@ -68,12 +68,14 @@ class SpiralComponent(Component):
     max_count = Float(10.0)
     start_scale = Float(2.25)
     end_scale = Float(1.5)
+    inverted = Bool(False)
     
     shape_choices = shape_dict.keys()
     shape = Trait(shape_dict.keys()[0], shape_dict)
 
     def draw(self, gc, **kwargs):
-        gc.clear()
+        colors = COLORS if not self.inverted else tuple(reversed(COLORS))
+        gc.clear(colors[0])
         
         center = (gc.width()/2, gc.height()/2)
         NUM = int(self.num_shapes)
@@ -87,7 +89,7 @@ class SpiralComponent(Component):
             x = center[0]+r*np.cos(t)*s
             y = center[1]+r*np.sin(t)*s
             
-            self.shape_(gc, x, y, r, t, int(n)*2)
+            self.shape_(gc, colors, x, y, r, t, int(n)*2)
 
 
 class SpiralCanvas(EnableCanvas):
@@ -110,6 +112,7 @@ class SpiralCanvas(EnableCanvas):
     max_count = DelegatesTo('component')
     start_scale = DelegatesTo('component')
     end_scale = DelegatesTo('component')
+    inverted = DelegatesTo('component')
     shape = DelegatesTo('component')
 
 
@@ -134,7 +137,7 @@ class SpiralCanvas(EnableCanvas):
     def _setup_init_widgets(self):
         super(SpiralCanvas, self)._setup_init_widgets()
 
-    @on_trait_change('num_shapes,num_cycles,max_radius,min_count,max_count,start_scale,end_scale,shape')
+    @on_trait_change('num_shapes,num_cycles,max_radius,min_count,max_count,start_scale,end_scale,inverted,shape')
     def _redraw(self):
         self.component.request_redraw()
 
