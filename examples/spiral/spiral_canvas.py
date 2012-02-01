@@ -9,6 +9,7 @@ from math import atan2
 import numpy as np
 
 from enable.api import Component
+from enable.kiva_graphics_context import GraphicsContext
 from traits.api import DelegatesTo, Float, Instance, on_trait_change, Trait
 
 from enaml.toolkit import Toolkit
@@ -120,6 +121,15 @@ class SpiralCanvas(EnableCanvas):
         tk = Toolkit.active_toolkit()
         cons = tk['EnableCanvas'].clone(shell_loader=lambda:cls)
         tk[cls.__name__] = cons
+
+    def save(self):
+        """ Save the contents of the component to a file.
+        """
+        # 100 DPI dimensions of the Macbook Pro 15"
+        size = (1435, 982)
+        gc = GraphicsContext(size)
+        self.component.draw(gc)
+        gc.save("spiral.png")
 
     def _setup_init_widgets(self):
         super(SpiralCanvas, self)._setup_init_widgets()

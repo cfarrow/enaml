@@ -84,3 +84,6 @@ SpiralWindow(MainWindow):
                 id: shape
                 items = spiral.component.shape_choices
                 value := spiral.shape
+            PushButton:
+                text = "Save"
+                released >> spiral.save()
