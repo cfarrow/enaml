@@ -110,6 +110,9 @@ QResizingFrame = _resizable(QtGui.QFrame)
 QResizingDialog = _resizable(QtGui.QDialog)
 
 
+QResizingFileDialog = _resizable(QtGui.QFileDialog)
+
+
 QResizingMainWindow = _resizable(QtGui.QMainWindow)
 
 
