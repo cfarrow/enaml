@@ -12,8 +12,8 @@ from enable.api import Component
 from enable.kiva_graphics_context import GraphicsContext
 from traits.api import Bool, DelegatesTo, Float, Instance, on_trait_change, Trait
 
-from enaml.toolkit import Toolkit
-from enaml.widgets.enable_canvas import EnableCanvas
+from enaml.components.enable_canvas import EnableCanvas
+from enaml.core.toolkit import Toolkit
 
 
 COLORS = ((1.0,1.0,1.0,1.0), (0.0,0.0,0.0,1.0))
