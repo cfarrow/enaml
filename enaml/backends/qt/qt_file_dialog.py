@@ -5,8 +5,8 @@
 from os.path import split
 
 from .qt import QtGui, QtCore
-from .qt_window import QtDialog, QtDialogLayout
-from .qt_resizing_widgets import QResizingDialog
+from .qt_dialog import QtDialog, QtDialogLayout
+from .qt_resizing_widgets import QResizingFileDialog
 
 from ...components.file_dialog import FileDialog
 

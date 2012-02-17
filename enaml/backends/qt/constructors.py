@@ -115,6 +115,7 @@ QT_CONSTRUCTORS = dict((
     constructor('check_box'),
     constructor('combo_box'),
     constructor('field'),
+    constructor('file_dialog'),
     constructor('html'),
     constructor('image'),
     constructor('label'),
