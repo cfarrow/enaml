@@ -9,8 +9,19 @@ Run spiral_plot.py to view this demo.
 """
 from range import Range
 
+def show_save(spiral):
+    sdlg = SaveDialog()
+    sdlg.show()
+    if sdlg.result == 'accepted':
+        spiral.save(sdlg.path)
 
-SpiralWindow(MainWindow):
+
+enamldef SaveDialog(FileDialog):
+    title = "Save"
+    type = "save"
+
+
+enamldef SpiralWindow(MainWindow):
     title = 'Spiral'
     Container:
         constraints = [
@@ -93,4 +104,4 @@ SpiralWindow(MainWindow):
             PushButton:
                 id: save
                 text = "Save"
-                released >> spiral.save()
+                released :: show_save(spiral)

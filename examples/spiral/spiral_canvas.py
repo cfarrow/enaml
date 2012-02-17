@@ -125,14 +125,14 @@ class SpiralCanvas(EnableCanvas):
         cons = tk['EnableCanvas'].clone(shell_loader=lambda:cls)
         tk[cls.__name__] = cons
 
-    def save(self):
+    def save(self, path):
         """ Save the contents of the component to a file.
         """
         # 100 DPI dimensions of the Macbook Pro 15"
         size = (1435, 982)
         gc = GraphicsContext(size)
         self.component.draw(gc)
-        gc.save("spiral.png")
+        gc.save(path)
 
     def _setup_init_widgets(self):
         super(SpiralCanvas, self)._setup_init_widgets()
